@@ -60,16 +60,18 @@ credit_menu_button = Button(
 
 credit_menu_button.grid(row=2, column=1, pady=15)
 
-exit_menu_button = Button(root,
-                          text="EXIT GAME",
-                          width=25,
-                          font=custom_font,
-                          bg="black",
-                          activebackground="black",
-                          activeforeground="white",
-                          fg="white",
-                          command=None)
+exit_menu_button = Button(
+    root,
+    text="EXIT GAME",
+    width=25,
+    font=custom_font,
+    bg="black",
+    activebackground="black",
+    activeforeground="white",
+    fg="white",
+    command=quit)
 
 exit_menu_button.grid(row=3, column=1, pady=15)
+
 
 root.mainloop()
