@@ -8,7 +8,7 @@ from tkinter import *
 # Stat varibles
 
 player_hp = 100
-player_base_attack = randint(3, 7)
+player_attack = 7
 gold = 0
 potions = 0
 armor = 8
@@ -46,12 +46,22 @@ root.option_add("*Label*background", "black")
 root.option_add("*Label*foreground", "white")
 root.option_add("*Label*font", custom_font)
 
+# Listbox configs
+root.option_add("*Listbox*font", custom_font)
+root.option_add("*Listbox*background", "black")
+root.option_add("*Listbox*foreground", "white")
+
 # Funktions (def)
 
 
 def clear_screen():
     for widget in root.winfo_children():
         widget.destroy()
+
+
+def return_menu():
+    button = Button(root, text="BACK", command=game_menu)
+    button.grid(column=1, pady=10)
 
 
 def explore():
@@ -61,9 +71,28 @@ def explore():
 def shop():
     clear_screen()
 
+    return_menu()
+
 
 def menu_stats():
     clear_screen()
+    label = Label(
+        root,
+        text="YOUR STATS")
+
+    label.grid(row=0, column=1, pady=(75, 25))
+
+    display_stats = Listbox(root)
+
+    display_stats.insert(1, f"HEALTH: {player_hp}")
+    display_stats.insert(2, f"ARMOR: {armor}")
+    display_stats.insert(3, f"DAMAGE: {player_attack}")
+    display_stats.insert(4, "CRIT DAMAGE: ")
+    display_stats.insert(5, "CRIT RATE: ")
+
+    display_stats.grid(row=1, column=1, pady=(40, 15))
+
+    return_menu()
 
 
 def game_menu():
