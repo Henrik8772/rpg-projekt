@@ -12,6 +12,7 @@ player_base_attack = randint(3, 7)
 gold = 0
 potions = 0
 armor = 8
+mana = 50
 
 
 # Tkinter
