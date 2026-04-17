@@ -22,40 +22,88 @@ root.columnconfigure(0, weight=1)
 root.columnconfigure(1, weight=1)
 root.columnconfigure(2, weight=1)
 
+# Button cofigs
+root.option_add("*Button*background", "black")
+root.option_add("*Button*foreground", "white")
+root.option_add("*Button*activeBackground", "black")
+root.option_add("*Button*activeForeground", "white")
+root.option_add("*Button*font", custom_font)
+root.option_add("*Button*width", "25")
+
+# Label configs
+root.option_add("*Label*background", "black")
+root.option_add("*Label*foreground", "white")
+root.option_add("*Label*font", custom_font)
+
+# Funktions (def)
+
+
+def clear_screen():
+    for widget in root.winfo_children():
+        widget.destroy()
+
+
+def explore():
+    clear_screen()
+
+
+def shop():
+    clear_screen()
+
+
+def menu_stats():
+    clear_screen()
+
+
+def game_menu():
+    clear_screen()
+
+    label = Label(
+        root,
+        text="WELCOME TO THE WORLD OF DRATHUS RPG")
+
+    label.grid(row=0, column=1, pady=(75, 25))
+
+    explore_button = Button(
+        root,
+        text="EXPLORE",
+        command=explore)
+
+    explore_button.grid(row=1, column=1, pady=(40, 15))
+
+    shop_button = Button(
+        root,
+        text="SHOP",
+        command=shop)
+
+    shop_button.grid(row=2, column=1, pady=15)
+
+    stats_button = Button(
+        root,
+        text="STATS",
+        command=menu_stats)
+
+    stats_button.grid(row=3, column=1, pady=15)
 
 # The main loop
 
 
-main_menu_label = Label(root,
-                        text="RPG-WORLD",
-                        font=custom_font,
-                        bg="black",
-                        fg="white")
+main_menu_label = Label(
+    root,
+    text="RPG-WORLD")
 
-main_menu_label.grid(row=0, column=1, pady=25)
+main_menu_label.grid(row=0, column=1, pady=(75, 25))
 
 start_game_button = Button(
     root,
     text="START A NEW JOURNEY",
-    width=25,
-    font=custom_font,
-    bg="black",
-    activebackground="black",
-    activeforeground="white",
-    fg="white",
-    command=None)
+    command=game_menu)
 
-start_game_button.grid(row=1, column=1, pady=20)
+start_game_button.grid(row=1, column=1, pady=(40, 15))
 
 credit_menu_button = Button(
     root,
     text="CREDITS",
-    width=25,
-    font=custom_font,
-    bg="black",
-    activebackground="black",
-    activeforeground="white",
-    fg="white",
     command=None)
 
 credit_menu_button.grid(row=2, column=1, pady=15)
@@ -63,12 +111,6 @@ credit_menu_button.grid(row=2, column=1, pady=15)
 exit_menu_button = Button(
     root,
     text="EXIT GAME",
-    width=25,
-    font=custom_font,
-    bg="black",
-    activebackground="black",
-    activeforeground="white",
-    fg="white",
     command=quit)
 
 exit_menu_button.grid(row=3, column=1, pady=15)
