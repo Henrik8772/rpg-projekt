@@ -1,8 +1,18 @@
 # Imports
 
+from random import randint
 import tkinter
 import tkinter.font as tkFont
 from tkinter import *
+
+# Stat varibles
+
+player_hp = 100
+player_base_attack = randint(3, 7)
+gold = 0
+potions = 0
+armor = 8
+
 
 # Tkinter
 
