@@ -79,6 +79,20 @@ passives = [
     }
 ]
 
+# Attacks
+
+attacks = [
+    {
+        "name": "Death's Dance",
+        "dmg": 20
+    },
+
+    {
+        "name": "Fireball",
+        "dmg": 40
+    }
+]
+
 
 # Tkinter
 
@@ -157,31 +171,54 @@ def explore():
     button.pack(side="bottom", pady=10)
 
 
+def open_new_window(name):
+    new_window = Toplevel(root)
+    new_window.title(name)
+    new_window.geometry("500x400")
+
+
 def encounter():
     def encounter_message():
         venture["text"] = (f"You have encountered a {monster["name"]}")
 
     def fight_button():
-        def fight_start():
-            button["text"] = "ATTACK"
-            button["command"] = attack
+
+        global button_fight
 
         button_frame = Frame()
-        button = Button(button_frame, text="FIGHT", command=fight_start)
-        button.pack(side="left", pady=50, padx=20)
+        button_fight = Button(button_frame, text="FIGHT", command=fight_start)
+        button_fight.pack(side="left", pady=50, padx=20)
         button_frame.pack(side="top", fill="x")
 
-        def attack():
-            button = Button(button_frame, text="något")
-            button.pack(side="left", pady=50, padx=20)
+    def go(event):
+        cs = attack_list.curselection()
+
+        if cs:
+            index = cs[0]
+
+            selected_attack = attacks[index]["name"]
+            open_new_window(selected_attack)
+
+    def choose_attack():
+        global attack_list, attack
+        button_fight.destroy()
+        attack_list = Listbox()
+
+        for attack in attacks:
+            attack_list.insert(END, f"{attack["name"]} Dmg: {attack["dmg"]}")
+
+        attack_list.bind("<Double-1>", go)
+        attack_list.pack()
+
+    def fight_start():
+        button_fight["text"] = "ATTACK"
+        button_fight["command"] = choose_attack
 
     monster = random.choice(monsters)
     venture = Label(root, text="You venture out into the forest")
     venture.pack(pady=(75, 25))
     root.after(2000, encounter_message)
-    root.after(4000, fight_button)
-
-    root.after(4000, )
+    root.after(2500, fight_button)
 
 
 def fight():
