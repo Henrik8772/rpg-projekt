@@ -6,6 +6,7 @@ import tkinter.font as tkFont
 from tkinter import *
 import random
 from random import randint
+from tkinter import ttk
 
 monster = ""
 
@@ -18,6 +19,9 @@ potions = 0
 armor = 8
 mana = 50
 crit_rate = 20
+
+damage = player_attack
+
 
 # Monsters
 
@@ -84,12 +88,14 @@ passives = [
 attacks = [
     {
         "name": "Death's Dance",
-        "dmg": 20
+        "dmg": 20,
+        "mana": 20
     },
 
     {
         "name": "Fireball",
-        "dmg": 40
+        "dmg": 40,
+        "mana": 45
     }
 ]
 
@@ -167,7 +173,7 @@ def explore():
     button = Button(button_frame, text="CAVERN", command=forest)
     button.pack(side="top", pady=50, padx=20)
     button_frame.pack(side="top", fill="x")
-    button = Button(root, text="Fight Early Access", command=fight)
+    button = Button(root, text="Fight Early Access", command=encounter)
     button.pack(side="bottom", pady=10)
 
 
@@ -178,52 +184,41 @@ def open_new_window(name):
 
 
 def encounter():
-    def encounter_message():
-        venture["text"] = (f"You have encountered a {monster["name"]}")
+    monster = random.choice(monsters)
+    monster_total_hp = monsters["hp"]
 
-    def fight_button():
-
-        global button_fight
+    def fight_start():
 
         button_frame = Frame()
-        button_fight = Button(button_frame, text="FIGHT", command=fight_start)
+        button_fight = Button(button_frame, text="ATTACK",
+                              command=choose_attack)
         button_fight.pack(side="left", pady=50, padx=20)
         button_frame.pack(side="top", fill="x")
 
-    def go(event):
-        cs = attack_list.curselection()
+        global action_frame
 
-        if cs:
-            index = cs[0]
-
-            selected_attack = attacks[index]["name"]
-            open_new_window(selected_attack)
+        action_frame = Frame(root, bg="black")
+        action_frame.pack(pady=10)
 
     def choose_attack():
-        global attack_list, attack
-        button_fight.destroy()
-        attack_list = Listbox()
+        button_fight.config(state="disabled")
 
-        for attack in attacks:
-            attack_list.insert(END, f"{attack["name"]} Dmg: {attack["dmg"]}")
+        for widget in action_frame.winfo_children():
+            widget.destroy()
 
-        attack_list.bind("<Double-1>", go)
-        attack_list.pack()
+        atk_names = [atk["name"] for atk in attacks]
+        selector = ttk.Combobox(
+            action_frame, values=atk_names, state="readonly", font=font_explore)
+        selector.set("Select Magic/Skill")
+        selector.pack(pady=5)
 
-    def fight_start():
-        button_fight["text"] = "ATTACK"
-        button_fight["command"] = choose_attack
+        confirm = Button(action_frame, text="CONFIRM", width=10,
+                         font=font_explore, command=lambda: finalize_attack(selector.get(), ))
 
-    monster = random.choice(monsters)
     venture = Label(root, text="You venture out into the forest")
     venture.pack(pady=(75, 25))
-    root.after(2000, encounter_message)
-    root.after(2500, fight_button)
-
-
-def fight():
-    clear_screen()
-    encounter()
+    root.after(1000, encounter_message)
+    root.after(1500, fight_start)
 
 
 def forest():
