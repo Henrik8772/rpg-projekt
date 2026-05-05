@@ -184,15 +184,21 @@ def open_new_window(name):
 
 
 def encounter():
+    clear_screen()
     monster = random.choice(monsters)
-    monster_total_hp = monsters["hp"]
+    monster_total_hp = monster[randint("hp")]
+
+    def encounter_message():
+        venture["text"] = (f"You have encountered a {monster["name"]}")
 
     def fight_start():
+        hp_label = Label(root, text=(f"HP: {monster_total_hp}"), bg="red")
+        hp_label.pack(pady=5)
 
         button_frame = Frame()
-        button_fight = Button(button_frame, text="ATTACK",
-                              command=choose_attack)
-        button_fight.pack(side="left", pady=50, padx=20)
+        main_attack_btn = Button(button_frame, text="ATTACK",
+                                 command=lambda: choose_attack(main_attack_btn, hp_label))
+        main_attack_btn.pack(side="left", pady=50, padx=20)
         button_frame.pack(side="top", fill="x")
 
         global action_frame
@@ -200,8 +206,8 @@ def encounter():
         action_frame = Frame(root, bg="black")
         action_frame.pack(pady=10)
 
-    def choose_attack():
-        button_fight.config(state="disabled")
+    def choose_attack(btn, hp_label):
+        btn.config(state="disabled")
 
         for widget in action_frame.winfo_children():
             widget.destroy()
@@ -213,7 +219,18 @@ def encounter():
         selector.pack(pady=5)
 
         confirm = Button(action_frame, text="CONFIRM", width=10,
-                         font=font_explore, command=lambda: finalize_attack(selector.get(), ))
+                         font=font_explore, command=lambda: finalize_attack(selector.get(), btn, hp_label))
+        confirm.pack(pady=5)
+
+    def finalize_attack(choice, btn, hp_label):
+        if choice == "Select Magic/Skill":
+            return
+
+        atk_data = next((a for a in attacks if a["name"] == choice), None)
+        dmg = player_attack + atk_data["dmg"]
+        monster_total_hp -= dmg
+
+        hp_label.config(text=f"HP: {monster_total_hp}")
 
     venture = Label(root, text="You venture out into the forest")
     venture.pack(pady=(75, 25))
