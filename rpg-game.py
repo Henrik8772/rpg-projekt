@@ -17,7 +17,7 @@ player_attack = 7
 gold = 0
 potions = 0
 armor = 8
-mana = 50
+mana_player = 50
 crit_rate = 20
 
 damage = player_attack
@@ -86,15 +86,18 @@ passives = [
 # Attacks
 
 attacks = [
+    # Combat skills/physical attacks
+
+    # Mana/Magic attacks
     {
         "name": "Death's Dance",
-        "dmg": 20,
+        "dmg": randint(10, 20),
         "mana": 20
     },
 
     {
         "name": "Fireball",
-        "dmg": 40,
+        "dmg": randint(20, 40),
         "mana": 45
     }
 ]
@@ -186,13 +189,13 @@ def open_new_window(name):
 def encounter():
     clear_screen()
     monster = random.choice(monsters)
-    monster_total_hp = monster[randint("hp")]
+    monster_total_hp = monster["hp"]
 
     def encounter_message():
         venture["text"] = (f"You have encountered a {monster["name"]}")
 
     def fight_start():
-        hp_label = Label(root, text=(f"HP: {monster_total_hp}"), bg="red")
+        hp_label = Label(root, text=(f"HP: {monster_total_hp}"), fg="red")
         hp_label.pack(pady=5)
 
         button_frame = Frame()
@@ -223,14 +226,39 @@ def encounter():
         confirm.pack(pady=5)
 
     def finalize_attack(choice, btn, hp_label):
+        nonlocal monster_total_hp
+        global mana_player
+
         if choice == "Select Magic/Skill":
             return
 
         atk_data = next((a for a in attacks if a["name"] == choice), None)
-        dmg = player_attack + atk_data["dmg"]
-        monster_total_hp -= dmg
+        if choice:
+            if "mana" in atk_data:
+                if mana_player < atk_data["mana"]:
+                    warn = Warning(text="Your dont have enough mana")
+                    return
+                else:
+                    if "mana" in atk_data:
+                        mana_player -= atk_data["mana"]
+
+            dmg = player_attack + atk_data["dmg"]
+            monster_total_hp -= dmg
 
         hp_label.config(text=f"HP: {monster_total_hp}")
+
+        for widget in action_frame.winfo_children():
+            widget.destroy()
+
+        btn.config(state="normal")
+
+        feedback = Label(
+            action_frame, text=f"Dealt {dmg} damage!", fg="yellow")
+        feedback.pack()
+        feedback = Label(
+            action_frame, text=f"You have {mana_player} mana left!", fg="light blue")
+        feedback.pack()
+        root.after(1000, feedback.destroy)
 
     venture = Label(root, text="You venture out into the forest")
     venture.pack(pady=(75, 25))
