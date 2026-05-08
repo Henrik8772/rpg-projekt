@@ -7,6 +7,7 @@ from tkinter import *
 import random
 from random import randint
 from tkinter import ttk
+from tkinter import messagebox
 
 monster = ""
 
@@ -25,15 +26,29 @@ damage = player_attack
 
 # Monsters
 
+monster_attack = ""
+
 monsters = [
     {
         "name": "Goblin",
-        "hp": randint(45, 125)
+        "hp": randint(45, 125),
+        "attacks": [
+            {
+                "name": "Clubing",
+                "dmg": randint(10, 25)
+            }
+        ]
     },
 
     {
         "name": "Kobalt",
-        "hp": randint(65, 120)
+        "hp": randint(65, 120),
+        "attacks": [
+            {
+                "name": "Bite",
+                "dmg": randint(12, 20)
+            }
+        ]
     }
 ]
 
@@ -87,6 +102,14 @@ passives = [
 
 attacks = [
     # Combat skills/physical attacks
+    {
+        "name": "DEBUGGER",
+        "dmg": 1000
+    },
+    {
+        "name": "Fatal Strike",
+        "dmg": randint(15, 25)
+    },
 
     # Mana/Magic attacks
     {
@@ -145,6 +168,9 @@ root.option_add("*Listbox*font", custom_font)
 root.option_add("*Listbox*background", "black")
 root.option_add("*Listbox*foreground", "white")
 
+# Messagebox configs
+root.option_add("*Messagebox*font", font_explore)
+
 # Funktions (def)
 
 
@@ -178,6 +204,19 @@ def explore():
     button_frame.pack(side="top", fill="x")
     button = Button(root, text="Fight Early Access", command=encounter)
     button.pack(side="bottom", pady=10)
+
+
+def keep_playing():
+    clear_screen()
+    label = Label(root, text="WANNA KEEP EXPLORING?")
+    label.pack(pady=(75, 25))
+    button_frame = Frame()
+
+    button = Button(button_frame, text="YES", command=explore)
+    button.pack(side="left", pady=50, padx=20)
+    button = Button(button_frame, text="NO", command=game_menu)
+    button.pack(side="right", pady=50, padx=20)
+    button_frame.pack(side="top")
 
 
 def open_new_window(name):
@@ -236,14 +275,22 @@ def encounter():
         if choice:
             if "mana" in atk_data:
                 if mana_player < atk_data["mana"]:
-                    warn = Warning(text="Your dont have enough mana")
+                    warn = messagebox.showwarning(
+                        message="You dont have enough mana to cast the magic!!!", )
                     return
+
                 else:
                     if "mana" in atk_data:
                         mana_player -= atk_data["mana"]
 
             dmg = player_attack + atk_data["dmg"]
             monster_total_hp -= dmg
+
+        if monster_total_hp > 0:
+            global player_hp
+            monster_attack = random.choice(monster["attacks"])
+            monster_dmg = monster_attack["dmg"]
+            player_hp -= monster_dmg
 
         hp_label.config(text=f"HP: {monster_total_hp}")
 
@@ -252,13 +299,33 @@ def encounter():
 
         btn.config(state="normal")
 
-        feedback = Label(
-            action_frame, text=f"Dealt {dmg} damage!", fg="yellow")
-        feedback.pack()
-        feedback = Label(
-            action_frame, text=f"You have {mana_player} mana left!", fg="light blue")
-        feedback.pack()
-        root.after(1000, feedback.destroy)
+        def player_feedback():
+            feedback = Label(
+                action_frame, text=f"Dealt {dmg} damage!", fg="yellow")
+            feedback.pack()
+            feedback1 = Label(
+                action_frame, text=f"You have {mana_player} mana left!", fg="light blue")
+            feedback1.pack()
+            root.after(1000, feedback.destroy)
+            root.after(1000, feedback1.destroy)
+
+        def feedback_monster():
+            monster_feedback = Label(
+                action_frame, text=f"The monster used {monster_attack["name"]} dealing {monster_dmg} to you!!", fg="yellow")
+            monster_feedback.pack()
+            root.after(1000, monster_feedback.destroy)
+
+        player_feedback()
+        root.after(2000, feedback_monster)
+
+        reward = randint(10, 30) * (monster["hp"]/9)
+
+        if monster_total_hp <= 0:
+            global gold
+            gold += reward
+            victory = messagebox.showinfo(
+                icon="question", message=f"Yippie you won and earned yourself {reward} gold coins!!!")
+            keep_playing()
 
     venture = Label(root, text="You venture out into the forest")
     venture.pack(pady=(75, 25))
@@ -289,7 +356,8 @@ def menu_stats():
     display_stats.insert(1, f"HEALTH: {player_hp}")
     display_stats.insert(2, f"ARMOR: {armor}")
     display_stats.insert(3, f"DAMAGE: {player_attack}")
-    display_stats.insert(4, f"CRIT RATE: {crit_rate}%")
+    display_stats.insert(4, f"MANA: {mana_player}")
+    display_stats.insert(5, f"CRIT RATE: {crit_rate}%")
 
     display_stats.pack(side="top", pady=(40, 15))
 
@@ -304,6 +372,9 @@ def game_menu():
         text="WELCOME TO THE WORLD OF DRATHUS RPG")
 
     label.pack(pady=(75, 25))
+
+    label_gold = Label(root, text=f"GOLD: {gold}")
+    label_gold.pack()
 
     explore_button = Button(
         root,
