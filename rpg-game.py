@@ -14,12 +14,16 @@ monster = ""
 # Stat varibles
 
 player_hp = 100
+player_hp_total = player_hp
 player_attack = 7
 gold = 0
 potions = 0
 armor = 8
-mana_player = 50
+mana_total = 50
+mana_player = mana_total
 crit_rate = 20
+luck = 0.20
+luck_multi = randint(1, 2)
 
 damage = player_attack
 
@@ -179,6 +183,12 @@ def clear_screen():
         widget.destroy()
 
 
+def stat_fix():
+    global mana_player, player_hp_total
+    mana_player = mana_total
+    player_hp_total = player_hp
+
+
 def return_menu():
     button_frame = Frame()
     button_frame.pack(side="top", fill="x")
@@ -227,6 +237,7 @@ def open_new_window(name):
 
 def encounter():
     clear_screen()
+    stat_fix()
     monster = random.choice(monsters)
     monster_total_hp = monster["hp"]
 
@@ -286,6 +297,9 @@ def encounter():
             dmg = player_attack + atk_data["dmg"]
             monster_total_hp -= dmg
 
+            if monster_total_hp < 0:
+                monster_total_hp = 0
+
         if monster_total_hp > 0:
             global player_hp
             monster_attack = random.choice(monster["attacks"])
@@ -314,14 +328,16 @@ def encounter():
                 action_frame, text=f"The monster used {monster_attack["name"]} dealing {monster_dmg} to you!!", fg="yellow")
             monster_feedback.pack()
             root.after(1000, monster_feedback.destroy)
-
-        player_feedback()
-        root.after(2000, feedback_monster)
-
-        reward = randint(10, 30) * (monster["hp"]/9)
+        if monster_total_hp != 0:
+            player_feedback()
+            root.after(2000, feedback_monster)
 
         if monster_total_hp <= 0:
             global gold
+            if random.random() < luck:
+                reward = randint(10, 30) * (monster["hp"]/100) * luck_multi
+            else:
+                reward = randint(10, 30) * (monster["hp"]/100)
             gold += reward
             victory = messagebox.showinfo(
                 icon="question", message=f"Yippie you won and earned yourself {reward} gold coins!!!")
@@ -366,6 +382,7 @@ def menu_stats():
 
 def game_menu():
     clear_screen()
+    stat_fix()
 
     label = Label(
         root,
