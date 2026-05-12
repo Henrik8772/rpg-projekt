@@ -5,7 +5,6 @@ import tkinter
 import tkinter.font as tkFont
 from tkinter import *
 import random
-from random import randint
 from tkinter import ttk
 from tkinter import messagebox
 
@@ -334,13 +333,12 @@ def encounter():
 
         if monster_total_hp <= 0:
             global gold
+            reward = randint(10, 30) * (monster["hp"]/100)
             if random.random() < luck:
-                reward = randint(10, 30) * (monster["hp"]/100) * luck_multi
-            else:
-                reward = randint(10, 30) * (monster["hp"]/100)
+                reward *= luck_multi
             gold += reward
             victory = messagebox.showinfo(
-                icon="question", message=f"Yippie you won and earned yourself {reward} gold coins!!!")
+                icon="question", message=f"Yippie you won and earned yourself {reward:.0f} gold coins!!!")
             keep_playing()
 
     venture = Label(root, text="You venture out into the forest")
@@ -353,8 +351,17 @@ def forest():
     clear_screen()
 
 
+def inventory():
+    clear_screen()
+
+
 def shop():
     clear_screen()
+    label = Label(root, text="ORXYS SHOP")
+    label.pack(pady=(75, 25))
+
+    label_gold = Label(root, text=f"GOLD: {gold:.0f}", fg="gold")
+    label_gold.pack()
 
     return_menu()
 
@@ -390,7 +397,7 @@ def game_menu():
 
     label.pack(pady=(75, 25))
 
-    label_gold = Label(root, text=f"GOLD: {gold}")
+    label_gold = Label(root, text=f"GOLD: {gold:.0f}", fg="gold")
     label_gold.pack()
 
     explore_button = Button(
@@ -399,6 +406,13 @@ def game_menu():
         command=explore)
 
     explore_button.pack(pady=(40, 15))
+
+    inventory_button = Button(
+        root,
+        text="INVENTORY",
+        command=inventory)
+
+    inventory_button.pack(pady=(15))
 
     shop_button = Button(
         root,
