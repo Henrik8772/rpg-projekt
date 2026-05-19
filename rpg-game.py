@@ -364,6 +364,7 @@ def encounter():
             victory = messagebox.showinfo(
                 icon="question", message=f"Yippie you won and earned yourself {reward:.0f} gold coins!!!")
             keep_playing()
+
     if monster["id"] == place_id:
         monster_total_hp = monster["hp"]
         venture = Label(root, text=f"You venture out into the {place_id}")
@@ -395,6 +396,7 @@ def mountains():
 
 def inventory():
     clear_screen()
+    return_menu()
 
 
 def shop():
