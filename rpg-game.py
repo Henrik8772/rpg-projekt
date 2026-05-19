@@ -275,6 +275,7 @@ def encounter():
         main_attack_btn = Button(button_frame, text="ATTACK",
                                  command=lambda: choose_attack(main_attack_btn, hp_label))
         main_attack_btn.pack(side="left", pady=50, padx=20)
+        battle_stats_ui = Listbox(button_frame,)
         button_frame.pack(side="top", fill="x")
 
         global action_frame
