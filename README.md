@@ -11,3 +11,5 @@ Jag har nu börjat med att bygga stat meny i battle systemet så spelaren ser si
 Jag har fixat stats och battle system samt decimal överflödet mitt mål med detta projekt var just battle systemet och nu är det klart så nu ska jag bygga på andra saker som exempelvis shop och inventory och sådant.
 
 Ändrade encountersarna till "klasser" så att endast monster med samma id som plats-idet kan slumpmässigt väljas, så att exempelvis Bats bara kan "spawna" i Cavern och så vidare.
+
+i want to fix more features such as inventory and items and shops that reset with random items and stuff.
