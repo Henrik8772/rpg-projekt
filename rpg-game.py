@@ -8,6 +8,11 @@ import random
 from tkinter import ttk
 from tkinter import messagebox
 
+# world varibles
+
+
+place_id = ""
+
 monster = ""
 
 # Stat varibles
@@ -33,6 +38,7 @@ monster_attack = ""
 
 monsters = [
     {
+        "id": "forest",
         "name": "Goblin",
         "hp": randint(45, 125),
         "attacks": [
@@ -44,12 +50,25 @@ monsters = [
     },
 
     {
+        "id": "mountains",
         "name": "Kobalt",
         "hp": randint(65, 120),
         "attacks": [
             {
                 "name": "Bite",
                 "dmg": randint(12, 20)
+            }
+        ]
+    },
+
+    {
+        "id": "cavern",
+        "name": "Screeching Bat",
+        "hp": randint(20, 70),
+        "attacks": [
+            {
+                "name": "Noise Blast",
+                "dmg": randint(10, 25)
             }
         ]
     }
@@ -206,9 +225,9 @@ def explore():
 
     button = Button(button_frame, text="FOREST", command=forest)
     button.pack(side="left", pady=50, padx=20)
-    button = Button(button_frame, text="MOUNTAINS", command=forest)
+    button = Button(button_frame, text="MOUNTAINS", command=mountains)
     button.pack(side="right", pady=50, padx=20)
-    button = Button(button_frame, text="CAVERN", command=forest)
+    button = Button(button_frame, text="CAVERN", command=cavern)
     button.pack(side="top", pady=50, padx=20)
     button_frame.pack(side="top", fill="x")
     button = Button(root, text="Fight Early Access", command=encounter)
@@ -238,6 +257,11 @@ def encounter():
     clear_screen()
     stat_fix()
     monster = random.choice(monsters)
+
+    for id in monster["id"]:
+        if id in monster["id"] != place_id:
+            monster = random.choice(monsters)
+
     monster_total_hp = monster["hp"]
 
     def encounter_message():
@@ -340,15 +364,33 @@ def encounter():
             victory = messagebox.showinfo(
                 icon="question", message=f"Yippie you won and earned yourself {reward:.0f} gold coins!!!")
             keep_playing()
-
-    venture = Label(root, text="You venture out into the forest")
-    venture.pack(pady=(75, 25))
-    root.after(1000, encounter_message)
-    root.after(1500, fight_start)
+    if monster["id"] == place_id:
+        monster_total_hp = monster["hp"]
+        venture = Label(root, text=f"You venture out into the {place_id}")
+        venture.pack(pady=(75, 25))
+        root.after(1000, encounter_message)
+        root.after(1500, fight_start)
 
 
 def forest():
+    global place_id
+    place_id = "forest"
     clear_screen()
+    encounter()
+
+
+def cavern():
+    global place_id
+    place_id = "cavern"
+    clear_screen()
+    encounter()
+
+
+def mountains():
+    global place_id
+    place_id = "mountains"
+    clear_screen()
+    encounter()
 
 
 def inventory():
