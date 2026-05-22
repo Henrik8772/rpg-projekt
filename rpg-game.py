@@ -16,7 +16,7 @@ place_id = ""
 monster = ""
 
 # Stat varibles
-
+player_speed = 360
 player_hp = 100
 player_hp_total = player_hp
 player_attack = 7
@@ -41,6 +41,7 @@ monsters = [
         "id": "forest",
         "name": "Goblin",
         "hp": randint(45, 125),
+        "pressure": randint(1, 5),
         "attacks": [
             {
                 "name": "Clubing",
@@ -230,8 +231,6 @@ def explore():
     button = Button(button_frame, text="CAVERN", command=cavern)
     button.pack(side="top", pady=50, padx=20)
     button_frame.pack(side="top", fill="x")
-    button = Button(root, text="Fight Early Access", command=encounter)
-    button.pack(side="bottom", pady=10)
 
 
 def keep_playing():
@@ -274,17 +273,23 @@ def encounter():
         main_attack_btn = Button(ui_frame, text="ATTACK",
                                  command=lambda: choose_attack(main_attack_btn, hp_label))
         main_attack_btn.pack(side="left", pady=50, padx=20)
+        run_away_btn = Button(ui_frame, text="RUN AWAY", command=)
         ui_frame.pack(side="top", fill="x")
 
         stat_ui = Listbox(root)
         stat_ui.insert(1, f"HEALTH: {player_hp_total}")
         stat_ui.insert(2, f"MANA: {mana_total}")
-        stat_ui.pack(side="right", pady=30, padx=20)
+        stat_ui.pack(side="left", pady=30, padx=20)
 
         global action_frame
 
         action_frame = Frame(root, bg="black")
         action_frame.pack(pady=10)
+
+    def escape():
+        if monster["pressure"] == 1 or 2 or 3:
+
+        escapist = player_speed
 
     def choose_attack(btn, hp_label):
         btn.config(state="disabled")
