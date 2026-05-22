@@ -262,21 +262,24 @@ def encounter():
         if id in monster["id"] != place_id:
             monster = random.choice(monsters)
 
-    monster_total_hp = monster["hp"]
-
     def encounter_message():
         venture["text"] = (f"You have encountered a {monster["name"]}")
 
     def fight_start():
+        global stat_ui
         hp_label = Label(root, text=(f"HP: {monster_total_hp}"), fg="red")
         hp_label.pack(pady=5)
 
-        button_frame = Frame()
-        main_attack_btn = Button(button_frame, text="ATTACK",
+        ui_frame = Frame()
+        main_attack_btn = Button(ui_frame, text="ATTACK",
                                  command=lambda: choose_attack(main_attack_btn, hp_label))
         main_attack_btn.pack(side="left", pady=50, padx=20)
-        battle_stats_ui = Listbox(button_frame,)
-        button_frame.pack(side="top", fill="x")
+        ui_frame.pack(side="top", fill="x")
+
+        stat_ui = Listbox(root)
+        stat_ui.insert(1, f"HEALTH: {player_hp_total}")
+        stat_ui.insert(2, f"MANA: {mana_total}")
+        stat_ui.pack(side="right", pady=30, padx=20)
 
         global action_frame
 
@@ -325,10 +328,12 @@ def encounter():
                 monster_total_hp = 0
 
         if monster_total_hp > 0:
-            global player_hp
+            global player_hp_total
             monster_attack = random.choice(monster["attacks"])
             monster_dmg = monster_attack["dmg"]
-            player_hp -= monster_dmg
+            player_hp_total -= monster_dmg
+            if player_hp_total < 0:
+                player_hp_total = 0
 
         hp_label.config(text=f"HP: {monster_total_hp}")
 
@@ -341,6 +346,8 @@ def encounter():
             feedback = Label(
                 action_frame, text=f"Dealt {dmg} damage!", fg="yellow")
             feedback.pack()
+            stat_ui.delete(1)
+            stat_ui.insert(1, f"MANA: {mana_player}")
             feedback1 = Label(
                 action_frame, text=f"You have {mana_player} mana left!", fg="light blue")
             feedback1.pack()
@@ -351,7 +358,10 @@ def encounter():
             monster_feedback = Label(
                 action_frame, text=f"The monster used {monster_attack["name"]} dealing {monster_dmg} to you!!", fg="yellow")
             monster_feedback.pack()
+            stat_ui.delete(0)
+            stat_ui.insert(0, f"HEALTH: {player_hp_total}")
             root.after(1000, monster_feedback.destroy)
+
         if monster_total_hp != 0:
             player_feedback()
             root.after(2000, feedback_monster)
