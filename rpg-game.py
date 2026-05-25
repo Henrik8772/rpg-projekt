@@ -41,7 +41,7 @@ monsters = [
         "id": "forest",
         "name": "Goblin",
         "hp": randint(45, 125),
-        "pressure": randint(1, 5),
+        "chance_for_pressure": randint(1, 100),
         "attacks": [
             {
                 "name": "Clubing",
@@ -54,7 +54,7 @@ monsters = [
         "id": "mountains",
         "name": "Kobalt",
         "hp": randint(65, 120),
-        "pressure": randint(1, 5),
+        "chance_for_pressure": randint(1, 100),
         "attacks": [
             {
                 "name": "Bite",
@@ -67,7 +67,7 @@ monsters = [
         "id": "cavern",
         "name": "Screeching Bat",
         "hp": randint(20, 70),
-        "pressure": randint(1, 5),
+        "chance_for_pressure": randint(1, 100),
         "attacks": [
             {
                 "name": "Noise Blast",
@@ -279,13 +279,39 @@ def encounter():
         if id in monster["id"] != place_id:
             monster = random.choice(monsters)
 
+    if monster["chance_for_pressure"] >= 85:
+        pressure = randint(4, 5)
+
+    elif monster["chance_for_pressure"] >= 45 and monster["chance_for_pressure"] < 85:
+        pressure = randint(1, 3)
+
+    else:
+        pressure = 0
+
     def encounter_message():
-        venture["text"] = (
-            f"You have encountered a {monster["name"]} with pressure lvl: {monster['pressure']}")
+        if pressure > 0:
+            venture["text"] = (
+                f"You have encountered a {monster["name"]} with pressure lvl: {pressure}")
+        else:
+            venture["text"] = (
+                f"You have encountered a {monster["name"]}")
 
     def fight_start():
         global stat_ui
-        hp_label = Label(root, text=(f"HP: {monster_total_hp}"), fg="red")
+        if pressure == 1 or 2 or 3:
+            extra_hp = (monster_total_hp / 10) * 2
+            monster_new_total = monster_total_hp + extra_hp
+
+        elif pressure == 4:
+            monster_new_total = monster_total_hp * 2
+
+        elif pressure == 5:
+            monster_new_total = monster_total_hp * 4
+
+        else:
+            monster_new_total = monster_total_hp
+
+        hp_label = Label(root, text=(f"HP: {monster_new_total:.0f}"), fg="red")
         hp_label.pack(pady=5)
 
         ui_frame = Frame()
@@ -307,7 +333,7 @@ def encounter():
         action_frame.pack(pady=10)
 
     def escape():
-        if monster["pressure"] == 1 or 2 or 3:
+        if pressure == 1 or 2 or 3:
 
             escape_chance = 0.50
             escapist = escape_chance * (player_speed / 100)
@@ -321,7 +347,7 @@ def encounter():
             else:
                 return
 
-        if monster["pressure"] == 4:
+        if pressure == 4:
 
             escape_chance = 0.30
             escapist = escape_chance * (player_speed / 100)
@@ -335,7 +361,7 @@ def encounter():
             else:
                 return
 
-        if monster["pressure"] == 5:
+        if pressure == 5:
 
             escape_chance = 0.25
             escapist = escape_chance * (player_speed / 100)
