@@ -13,3 +13,5 @@ Jag har fixat stats och battle system samt decimal överflödet mitt mål med de
 Ändrade encountersarna till "klasser" så att endast monster med samma id som plats-idet kan slumpmässigt väljas, så att exempelvis Bats bara kan "spawna" i Cavern och så vidare.
 
 i want to fix more features such as inventory and items and shops that reset with random items and stuff.
+
+Adding stuff for a pressure system to make the battles more random and harder.

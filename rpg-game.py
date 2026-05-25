@@ -54,6 +54,7 @@ monsters = [
         "id": "mountains",
         "name": "Kobalt",
         "hp": randint(65, 120),
+        "pressure": randint(1, 5),
         "attacks": [
             {
                 "name": "Bite",
@@ -66,6 +67,7 @@ monsters = [
         "id": "cavern",
         "name": "Screeching Bat",
         "hp": randint(20, 70),
+        "pressure": randint(1, 5),
         "attacks": [
             {
                 "name": "Noise Blast",
@@ -246,6 +248,22 @@ def keep_playing():
     button_frame.pack(side="top")
 
 
+def ran_away():
+    clear_screen()
+    label = Label(root, text="YOU MANAGED TO ESCAPE!!")
+    label.pack(pady=(75, 25))
+    button_frame = Frame()
+
+    label2 = Label(root, text="You wanna explore somewhere else?")
+    label2.pack(pady=(10, 25))
+
+    button = Button(button_frame, text="YES", command=explore)
+    button.pack(side="left", pady=50, padx=20)
+    button = Button(button_frame, text="NO", command=game_menu)
+    button.pack(side="right", pady=50, padx=20)
+    button_frame.pack(side="top")
+
+
 def open_new_window(name):
     new_window = Toplevel(root)
     new_window.title(name)
@@ -262,7 +280,8 @@ def encounter():
             monster = random.choice(monsters)
 
     def encounter_message():
-        venture["text"] = (f"You have encountered a {monster["name"]}")
+        venture["text"] = (
+            f"You have encountered a {monster["name"]} with pressure lvl: {monster['pressure']}")
 
     def fight_start():
         global stat_ui
@@ -273,7 +292,8 @@ def encounter():
         main_attack_btn = Button(ui_frame, text="ATTACK",
                                  command=lambda: choose_attack(main_attack_btn, hp_label))
         main_attack_btn.pack(side="left", pady=50, padx=20)
-        run_away_btn = Button(ui_frame, text="RUN AWAY", command=)
+        run_away_btn = Button(ui_frame, text="RUN AWAY", command=escape)
+        run_away_btn.pack(side="right", pady=50, padx=20)
         ui_frame.pack(side="top", fill="x")
 
         stat_ui = Listbox(root)
@@ -289,7 +309,45 @@ def encounter():
     def escape():
         if monster["pressure"] == 1 or 2 or 3:
 
-        escapist = player_speed
+            escape_chance = 0.50
+            escapist = escape_chance * (player_speed / 100)
+            escape_total = escape_chance + escapist
+
+            if escape_total > 1:
+                escape_total = 1
+
+            if random.random() < escape_total:
+                ran_away()
+            else:
+                return
+
+        if monster["pressure"] == 4:
+
+            escape_chance = 0.30
+            escapist = escape_chance * (player_speed / 100)
+            escape_total = escape_chance + escapist
+
+            if escape_total > 1:
+                escape_total = 1
+
+            if random.random() < escape_total:
+                ran_away()
+            else:
+                return
+
+        if monster["pressure"] == 5:
+
+            escape_chance = 0.25
+            escapist = escape_chance * (player_speed / 100)
+            escape_total = escape_chance + escapist
+
+            if escape_total > 1:
+                escape_total = 1
+
+            if random.random() < escape_total:
+                ran_away()
+            else:
+                return
 
     def choose_attack(btn, hp_label):
         btn.config(state="disabled")
