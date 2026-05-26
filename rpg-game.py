@@ -94,56 +94,56 @@ monsters = [
                 "drop_rate": 0.05,
                 "quality_range": (40, 100),
                 "quantity_range": (1, 2),
-                "base_worth": randint(10, 30)
+                "base_worth_range": (10, 30)
             },
 
             {
                 "name": "Transmutated Mana Stone",
                 "drop_rate": 0.005,
-                "quality": randint(80, 100),
-                "quantity": 1,
-                "base_worth": randint(100, 300)
+                "quality_range": (80, 100),
+                "quantity_range": (1, 1),
+                "base_worth_range": (100, 300)
             },
 
             {
                 "name": "Kings Idol",
                 "drop_rate": 0.009,
-                "quality": 100,
-                "quantity": 1,
-                "base_worth": 1
+                "quality_range": (100, 100),
+                "quantity_range": (1, 1),
+                "base_worth_range": (1, 1)
             }
         ],
         "monster_drops": [
             {
                 "name": "Goblin Ear",
                 "drop_rate": 0.5,
-                "quality": randint(1, 100),
-                "quantity": randint(1, 2),
-                "base_worth": randint(2, 10)
+                "quality_range": (1, 100),
+                "quantity_range": (1, 2),
+                "base_worth_range": (2, 10)
             },
 
             {
                 "name": "Lesser Goblin Core",
                 "drop_rate": 0.4,
-                "quality": randint(1, 100),
-                "quantity": 1,
-                "base_worth": randint(10, 20)
+                "quality_range": (1, 100),
+                "quantity_range": (1, 1),
+                "base_worth_range": (10, 20)
             },
 
             {
                 "name": "Mana Stone",
                 "drop_rate": 0.5,
-                "quality": randint(40, 100),
-                "quantity": randint(1, 2),
-                "base_worth": randint(10, 30)
+                "quality_range": (40, 100),
+                "quantity_range": (1, 2),
+                "base_worth_range": (10, 30)
             },
 
             {
                 "name": "Kings Idol",
                 "drop_rate": 0.02,
-                "quality": 100,
-                "quantity": 1,
-                "base_worth": 1
+                "quality_range": (100, 100),
+                "quantity_range": (1, 1),
+                "base_worth_range": (1, 1)
             }
 
 
@@ -152,41 +152,41 @@ monsters = [
             {
                 "name": "Tome of Knowledge",
                 "drop_rate": 0.03,
-                "quality": randint(1, 100),
-                "quantity": 1,
-                "base_worth": 200
+                "quality_range": (1, 100),
+                "quantity_range": (1, 1),
+                "base_worth_range": (200, 200)
             },
 
             {
                 "name": "Medium Goblin Core",
                 "drop_rate": 0.8,
-                "quality": randint(1, 100),
-                "quantity": 1,
-                "base_worth": randint(40, 90)
+                "quality_range": (1, 100),
+                "quantity_range": (1, 1),
+                "base_worth_range": (40, 90)
             },
 
             {
                 "name": "Large Goblin Core",
                 "drop_rate": 0.2,
-                "quality": randint(1, 100),
-                "quantity": 1,
-                "base_worth": randint(80, 170)
+                "quality_range": (1, 100),
+                "quantity_range": (1, 1),
+                "base_worth_range": (80, 170)
             },
 
             {
                 "name": "Large Mana Stone",
                 "drop_rate": 0.4,
-                "quality": randint(50, 100),
-                "quantity": 1,
-                "base_worth": 100
+                "quality_range": (50, 100),
+                "quantity_range": (1, 1),
+                "base_worth_range": (100, 100)
             },
 
             {
                 "name": "Wooden Club",
                 "drop_rate": 0.6,
-                "quality": randint(1, 100),
-                "quantity": 1,
-                "base_worth": 20,
+                "quality_range": (1, 100),
+                "quantity_range": (1, 1),
+                "base_worth_range": (20, 20),
                 "weapon_stats": [
                     {
                         "dmg": 5
@@ -197,18 +197,18 @@ monsters = [
             {
                 "name": "Kings Idol",
                 "drop_rate": 0.5,
-                "quality": 100,
-                "quantity": 1,
-                "base_worth": 1
+                "quality_range": (100, 100),
+                "quantity_range": (1, 1),
+                "base_worth_range": (1, 1)
             }
         ],
         "elite_drops": [
             {
                 "name": "Goblin Kings Fury",
                 "drop_rate": 0.001,
-                "quality": 100,
-                "quantity": 1,
-                "base_worth": 1500,
+                "quality_range": (100, 100),
+                "quantity_range": (1, 1),
+                "base_worth_range": (1500, 1500),
                 "weapon_stats": [
                     {
                         "dmg": 40
@@ -219,41 +219,41 @@ monsters = [
             {
                 "name": "Divine Goblin Core",
                 "drop_rate": 0.4,
-                "quality": randint(70, 100),
-                "quantity": 1,
-                "base_worth": 200
+                "quality_range": (70, 100),
+                "quantity_range": (1, 1),
+                "base_worth_range": (200, 200)
             },
 
             {
                 "name": "Large Goblin Core",
                 "drop_rate": 0.75,
-                "quality": randint(1, 100),
-                "quantity": 1,
-                "base_worth": randint(80, 170)
+                "quality_range": (1, 100),
+                "quantity_range": (1, 1),
+                "base_worth_range": (80, 170)
             },
 
             {
                 "name": "Tome of Knowledge",
                 "drop_rate": 0.5,
-                "quality": randint(1, 100),
-                "quantity": 1,
-                "base_worth": 200
+                "quality_range": (1, 100),
+                "quantity_range": (1, 1),
+                "base_worth_range": (200, 200)
             },
 
             {
                 "name": "Potent Mana Stone",
                 "drop_rate": 0.6,
-                "quality": randint(60, 100),
-                "quantity": 1,
-                "base_worth": 175
+                "quality_range": (60, 100),
+                "quantity_range": (1, 1),
+                "base_worth_range": (175, 175)
             },
 
             {
                 "name": "Kings Idol",
                 "drop_rate": 1,
-                "quality": 100,
-                "quantity": 1,
-                "base_worth": 1
+                "quality_range": (100, 100),
+                "quantity_range": (1, 1),
+                "base_worth_range": (1, 1)
             }
         ]
     },
@@ -265,7 +265,7 @@ monsters = [
         "attacks": [
             {
                 "name": "Bite",
-                "dmg": randint(12, 20)
+                "dmg_range": (12, 20)
             }
         ],
         "basic_drops": [
@@ -289,7 +289,7 @@ monsters = [
         "attacks": [
             {
                 "name": "Noise Blast",
-                "dmg": randint(10, 25)
+                "dmg_range": (10, 25)
             }
         ],
         "basic_drops": [
@@ -360,23 +360,23 @@ attacks = [
     # Combat skills/physical attacks
     {
         "name": "DEBUGGER",
-        "dmg": 1000
+        "dmg_range": (1000, 1000)
     },
     {
         "name": "Fatal Strike",
-        "dmg": randint(15, 25)
+        "dmg_range": (15, 25)
     },
 
     # Mana/Magic attacks
     {
         "name": "Death's Dance",
-        "dmg": randint(10, 20),
+        "dmg_range": (10, 20),
         "mana": 20
     },
 
     {
         "name": "Fireball",
-        "dmg": randint(20, 40),
+        "dmg_range": (20, 40),
         "mana": 45
     }
 ]
@@ -534,20 +534,22 @@ def encounter():
 
     def fight_start():
         global stat_ui
+        nonlocal monster_total_hp
+
         if pressure in [1, 2, 3]:
             extra_hp = (monster_total_hp / 10) * 2
-            monster_new_total = monster_total_hp + extra_hp
+            monster_total_hp = monster_total_hp + extra_hp
 
         elif pressure == 4:
-            monster_new_total = monster_total_hp * 2
+            monster_total_hp = monster_total_hp * 2
 
         elif pressure == 5:
-            monster_new_total = monster_total_hp * 4
+            monster_total_hp = monster_total_hp * 4
 
         else:
-            monster_new_total = monster_total_hp
+            monster_total_hp = monster_total_hp
 
-        hp_label = Label(root, text=(f"HP: {monster_new_total:.0f}"), fg="red")
+        hp_label = Label(root, text=(f"HP: {monster_total_hp:.0f}"), fg="red")
         hp_label.pack(pady=5)
 
         ui_frame = Frame()
@@ -623,7 +625,10 @@ def encounter():
                     if "mana" in atk_data:
                         mana_player -= atk_data["mana"]
 
-            dmg = player_attack + atk_data["dmg"]
+            skill_dmg = random.randint(
+                atk_data["dmg_range"][0], atk_data["dmg_range"][1])
+
+            dmg = player_attack + skill_dmg
             monster_total_hp -= dmg
 
             if monster_total_hp < 0:
@@ -631,8 +636,12 @@ def encounter():
 
         if monster_total_hp > 0:
             global player_hp_total
-            monster_attack = random.choice(monster["attacks"])
-            monster_dmg = monster_attack["dmg"]
+            monster_attack_data = random.choice(monster["attacks"])
+            if "dmg_range" in monster_attack_data:
+                monster_dmg = random.randint(
+                    monster_attack_data["dmg_range"][0], monster_attack_data["dmg_range"][1])
+            else:
+                monster_dmg = 10
             if pressure == 5:
                 monster_dmg += 12
 
@@ -667,7 +676,7 @@ def encounter():
 
         def feedback_monster():
             monster_feedback = Label(
-                action_frame, text=f"The monster used {monster_attack["name"]} dealing {monster_dmg} to you!!", fg="yellow")
+                action_frame, text=f"The monster used {monster_attack_data["name"]} dealing {monster_dmg} to you!!", fg="yellow")
             monster_feedback.pack()
             stat_ui.delete(0)
             stat_ui.insert(0, f"HEALTH: {player_hp_total}")
@@ -679,7 +688,7 @@ def encounter():
 
         if monster_total_hp <= 0:
             global gold
-            reward = randint(10, 30) * (monster["hp"]/100)
+            reward = randint(10, 30) * (monster["hp_range"][1]/100)
             if random.random() < luck:
                 reward *= luck_multi
             gold += reward
@@ -732,23 +741,26 @@ def encounter():
             else:
                 msg_text = "You got "
                 if basic_loot:
-                    for _ in range(basic_loot["quantity"]):
+                    basic_quantity = random.randint(
+                        basic_loot["quantity_range"][0], basic_loot["quantity_range"][1])
+                    for _ in range(basic_quantity):
                         item_inventory.append(basic_loot["name"])
-                    msg_text += f"{basic_loot['quantity']}x {basic_loot['name']}"
+                    msg_text += f"{basic_quantity}x {basic_loot['name']}"
 
                 if loot:
-                    for _ in range(loot["quantity"]):
+                    loot_quantity = random.randint(
+                        loot["quantity_range"][0], loot["quantity_range"][1])
+                    for _ in range(loot_quantity):
                         item_inventory.append(loot["name"])
                     if basic_loot:
-                        msg_text += f" and {loot['quantity']}x {loot['name']}"
+                        msg_text += f" and {loot_quantity}x {loot['name']}"
                     else:
-                        msg_text += f"{loot['quantity']}x {loot['name']}"
+                        msg_text += f"{loot_quantity}x {loot['name']}"
                 messagebox.showinfo(icon="question", message=msg_text)
 
             item_inventory.sort()
             keep_playing()
 
-    monster_total_hp = monster["hp"]
     venture = Label(root, text=f"You venture out into the {place_id}")
     venture.pack(pady=(75, 25))
     root.after(1000, encounter_message)
