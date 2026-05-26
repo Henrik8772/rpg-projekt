@@ -10,6 +10,7 @@ from tkinter import messagebox
 
 # world varibles
 
+item_inventory = []
 
 place_id = ""
 
@@ -35,17 +36,224 @@ damage = player_attack
 # Monsters
 
 monster_attack = ""
+boss_attack = ""
+
+bosses = [
+    {
+        "id": "forest_boss",
+        "name": "Goblin King",
+        "hp": 1000,
+        "chance_for_pressure": 0,
+        "attacks": [
+            {
+                "name": "Kings Judgment",
+                "dmg_type": "percentage",
+                "accuracy": 0.4
+            },
+
+            {
+                "name": "Rapid Smash",
+                "dmg_range": (10, 20),
+                "hits_range": (1, 3),
+                "accuracy": 0.5
+            }
+        ]
+    }
+]
 
 monsters = [
     {
         "id": "forest",
         "name": "Goblin",
-        "hp": randint(45, 125),
-        "chance_for_pressure": randint(1, 100),
+        "hp_range": (45, 125),
         "attacks": [
             {
                 "name": "Clubing",
-                "dmg": randint(10, 25)
+                "dmg_range": (10, 25)
+            }
+        ],
+        "basic_drops": [
+            {
+                "name": "Scrap Metal",
+                "drop_rate": 0.75,
+                "quality_range": (0, 0),
+                "quantity_range": (1, 10),
+                "base_worth_range": (1, 1)
+            },
+
+            {
+                "name": "Metal Alloy",
+                "drop_rate": 0.20,
+                "quality_range": (1, 100),
+                "quantity_range": (1, 3),
+                "base_worth_range": (3, 7)
+            },
+
+            {
+                "name": "Mana Stone",
+                "drop_rate": 0.05,
+                "quality_range": (40, 100),
+                "quantity_range": (1, 2),
+                "base_worth": randint(10, 30)
+            },
+
+            {
+                "name": "Transmutated Mana Stone",
+                "drop_rate": 0.005,
+                "quality": randint(80, 100),
+                "quantity": 1,
+                "base_worth": randint(100, 300)
+            },
+
+            {
+                "name": "Kings Idol",
+                "drop_rate": 0.009,
+                "quality": 100,
+                "quantity": 1,
+                "base_worth": 1
+            }
+        ],
+        "monster_drops": [
+            {
+                "name": "Goblin Ear",
+                "drop_rate": 0.5,
+                "quality": randint(1, 100),
+                "quantity": randint(1, 2),
+                "base_worth": randint(2, 10)
+            },
+
+            {
+                "name": "Lesser Goblin Core",
+                "drop_rate": 0.4,
+                "quality": randint(1, 100),
+                "quantity": 1,
+                "base_worth": randint(10, 20)
+            },
+
+            {
+                "name": "Mana Stone",
+                "drop_rate": 0.5,
+                "quality": randint(40, 100),
+                "quantity": randint(1, 2),
+                "base_worth": randint(10, 30)
+            },
+
+            {
+                "name": "Kings Idol",
+                "drop_rate": 0.02,
+                "quality": 100,
+                "quantity": 1,
+                "base_worth": 1
+            }
+
+
+        ],
+        "rare_drops": [
+            {
+                "name": "Tome of Knowledge",
+                "drop_rate": 0.03,
+                "quality": randint(1, 100),
+                "quantity": 1,
+                "base_worth": 200
+            },
+
+            {
+                "name": "Medium Goblin Core",
+                "drop_rate": 0.8,
+                "quality": randint(1, 100),
+                "quantity": 1,
+                "base_worth": randint(40, 90)
+            },
+
+            {
+                "name": "Large Goblin Core",
+                "drop_rate": 0.2,
+                "quality": randint(1, 100),
+                "quantity": 1,
+                "base_worth": randint(80, 170)
+            },
+
+            {
+                "name": "Large Mana Stone",
+                "drop_rate": 0.4,
+                "quality": randint(50, 100),
+                "quantity": 1,
+                "base_worth": 100
+            },
+
+            {
+                "name": "Wooden Club",
+                "drop_rate": 0.6,
+                "quality": randint(1, 100),
+                "quantity": 1,
+                "base_worth": 20,
+                "weapon_stats": [
+                    {
+                        "dmg": 5
+                    }
+                ]
+            },
+
+            {
+                "name": "Kings Idol",
+                "drop_rate": 0.5,
+                "quality": 100,
+                "quantity": 1,
+                "base_worth": 1
+            }
+        ],
+        "elite_drops": [
+            {
+                "name": "Goblin Kings Fury",
+                "drop_rate": 0.001,
+                "quality": 100,
+                "quantity": 1,
+                "base_worth": 1500,
+                "weapon_stats": [
+                    {
+                        "dmg": 40
+                    }
+                ]
+            },
+
+            {
+                "name": "Divine Goblin Core",
+                "drop_rate": 0.4,
+                "quality": randint(70, 100),
+                "quantity": 1,
+                "base_worth": 200
+            },
+
+            {
+                "name": "Large Goblin Core",
+                "drop_rate": 0.75,
+                "quality": randint(1, 100),
+                "quantity": 1,
+                "base_worth": randint(80, 170)
+            },
+
+            {
+                "name": "Tome of Knowledge",
+                "drop_rate": 0.5,
+                "quality": randint(1, 100),
+                "quantity": 1,
+                "base_worth": 200
+            },
+
+            {
+                "name": "Potent Mana Stone",
+                "drop_rate": 0.6,
+                "quality": randint(60, 100),
+                "quantity": 1,
+                "base_worth": 175
+            },
+
+            {
+                "name": "Kings Idol",
+                "drop_rate": 1,
+                "quality": 100,
+                "quantity": 1,
+                "base_worth": 1
             }
         ]
     },
@@ -53,29 +261,52 @@ monsters = [
     {
         "id": "mountains",
         "name": "Kobalt",
-        "hp": randint(65, 120),
-        "chance_for_pressure": randint(1, 100),
+        "hp_range": (65, 120),
         "attacks": [
             {
                 "name": "Bite",
                 "dmg": randint(12, 20)
             }
+        ],
+        "basic_drops": [
+
+        ],
+        "monster_drops": [
+
+        ],
+        "rare_drops": [
+
+        ],
+        "elite_drops": [
+
         ]
     },
 
     {
         "id": "cavern",
         "name": "Screeching Bat",
-        "hp": randint(20, 70),
-        "chance_for_pressure": randint(1, 100),
+        "hp_range": (20, 70),
         "attacks": [
             {
                 "name": "Noise Blast",
                 "dmg": randint(10, 25)
             }
+        ],
+        "basic_drops": [
+
+        ],
+        "monster_drops": [
+
+        ],
+        "rare_drops": [
+
+        ],
+        "elite_drops": [
+
         ]
     }
 ]
+
 
 # Shop items
 
@@ -273,18 +504,23 @@ def open_new_window(name):
 def encounter():
     clear_screen()
     stat_fix()
-    monster = random.choice(monsters)
 
-    for id in monster["id"]:
-        if id in monster["id"] != place_id:
-            monster = random.choice(monsters)
+    available_monsters = [m for m in monsters if m["id"] == place_id]
+    if not available_monsters:
+        return
+    monster = random.choice(available_monsters)
 
-    if monster["chance_for_pressure"] >= 85:
-        pressure = randint(4, 5)
+    monster_total_hp = random.randint(
+        monster["hp_range"][0], monster["hp_range"][1])
 
-    elif monster["chance_for_pressure"] >= 45 and monster["chance_for_pressure"] < 85:
-        pressure = randint(1, 3)
+    roll_pressure = random.randint(1, 100)
 
+    if roll_pressure >= 85 and roll_pressure < 95:
+        pressure = 4
+    elif roll_pressure >= 95 and roll_pressure <= 100:
+        pressure = 5
+    elif roll_pressure >= 60 and roll_pressure < 85:
+        pressure = random.randint(1, 3)
     else:
         pressure = 0
 
@@ -298,7 +534,7 @@ def encounter():
 
     def fight_start():
         global stat_ui
-        if pressure == 1 or 2 or 3:
+        if pressure in [1, 2, 3]:
             extra_hp = (monster_total_hp / 10) * 2
             monster_new_total = monster_total_hp + extra_hp
 
@@ -333,47 +569,24 @@ def encounter():
         action_frame.pack(pady=10)
 
     def escape():
-        if pressure == 1 or 2 or 3:
-
+        if pressure in [1, 2, 3]:
             escape_chance = 0.50
-            escapist = escape_chance * (player_speed / 100)
-            escape_total = escape_chance + escapist
-
-            if escape_total > 1:
-                escape_total = 1
-
-            if random.random() < escape_total:
-                ran_away()
-            else:
-                return
-
-        if pressure == 4:
-
+        elif pressure == 4:
             escape_chance = 0.30
-            escapist = escape_chance * (player_speed / 100)
-            escape_total = escape_chance + escapist
-
-            if escape_total > 1:
-                escape_total = 1
-
-            if random.random() < escape_total:
-                ran_away()
-            else:
-                return
-
-        if pressure == 5:
-
+        elif pressure == 5:
             escape_chance = 0.25
-            escapist = escape_chance * (player_speed / 100)
-            escape_total = escape_chance + escapist
+        else:
+            escape_chance = 0.50
+        escapist = escape_chance * (player_speed / 100)
+        escape_total = escape_chance + escapist
 
-            if escape_total > 1:
-                escape_total = 1
+        if escape_total > 1:
+            escape_total = 1
 
-            if random.random() < escape_total:
-                ran_away()
-            else:
-                return
+        if random.random() < escape_total:
+            ran_away()
+        else:
+            return
 
     def choose_attack(btn, hp_label):
         btn.config(state="disabled")
@@ -420,6 +633,15 @@ def encounter():
             global player_hp_total
             monster_attack = random.choice(monster["attacks"])
             monster_dmg = monster_attack["dmg"]
+            if pressure == 5:
+                monster_dmg += 12
+
+            elif pressure == 4:
+                monster_dmg += 7
+
+            elif pressure in [1, 2, 3]:
+                monster_dmg += 4
+
             player_hp_total -= monster_dmg
             if player_hp_total < 0:
                 player_hp_total = 0
@@ -461,16 +683,76 @@ def encounter():
             if random.random() < luck:
                 reward *= luck_multi
             gold += reward
-            victory = messagebox.showinfo(
+
+            basic_loot = None
+            loot = None
+
+            if pressure == 0:
+                if monster.get("basic_drops"):
+                    basic_loot = random.choice(monster["basic_drops"])
+                    if random.random() > basic_loot["drop_rate"]:
+                        basic_loot = None
+
+            elif pressure in [1, 2, 3]:
+                if monster.get("basic_drops"):
+                    basic_loot = random.choice(monster["basic_drops"])
+                    if random.random() > basic_loot["drop_rate"]:
+                        basic_loot = None
+                if monster.get("monster_drops"):
+                    loot = random.choice(monster["monster_drops"])
+                    if random.random() > loot["drop_rate"]:
+                        loot = None
+
+            elif pressure == 4:
+                if monster.get("basic_drops"):
+                    basic_loot = random.choice(monster["basic_drops"])
+                    if random.random() > basic_loot["drop_rate"]:
+                        basic_loot = None
+                if monster.get("rare_drops"):
+                    loot = random.choice(monster["rare_drops"])
+                    if random.random() > loot["drop_rate"]:
+                        loot = None
+
+            elif pressure == 5:
+                if monster.get("basic_drops"):
+                    basic_loot = random.choice(monster["basic_drops"])
+                    if random.random() > basic_loot["drop_rate"]:
+                        basic_loot = None
+                if monster.get("elite_drops"):
+                    loot = random.choice(monster["elite_drops"])
+                    if random.random() > loot["drop_rate"]:
+                        loot = None
+
+            messagebox.showinfo(
                 icon="question", message=f"Yippie you won and earned yourself {reward:.0f} gold coins!!!")
+
+            if basic_loot is None and loot is None:
+                messagebox.showinfo(
+                    icon="question", message="You got nothing :(")
+            else:
+                msg_text = "You got "
+                if basic_loot:
+                    for _ in range(basic_loot["quantity"]):
+                        item_inventory.append(basic_loot["name"])
+                    msg_text += f"{basic_loot['quantity']}x {basic_loot['name']}"
+
+                if loot:
+                    for _ in range(loot["quantity"]):
+                        item_inventory.append(loot["name"])
+                    if basic_loot:
+                        msg_text += f" and {loot['quantity']}x {loot['name']}"
+                    else:
+                        msg_text += f"{loot['quantity']}x {loot['name']}"
+                messagebox.showinfo(icon="question", message=msg_text)
+
+            item_inventory.sort()
             keep_playing()
 
-    if monster["id"] == place_id:
-        monster_total_hp = monster["hp"]
-        venture = Label(root, text=f"You venture out into the {place_id}")
-        venture.pack(pady=(75, 25))
-        root.after(1000, encounter_message)
-        root.after(1500, fight_start)
+    monster_total_hp = monster["hp"]
+    venture = Label(root, text=f"You venture out into the {place_id}")
+    venture.pack(pady=(75, 25))
+    root.after(1000, encounter_message)
+    root.after(1500, fight_start)
 
 
 def forest():
@@ -494,8 +776,25 @@ def mountains():
     encounter()
 
 
+def update_inventory():
+    if "display_items" in globals() and display_items.winfo_exists():
+        display_items.delete(0, END)
+        if item_inventory:
+            for item in sorted(set(item_inventory)):
+                display_items.insert(
+                    END, f"{item_inventory.count(item)}x {item}")
+
+
 def inventory():
+    global display_items
     clear_screen()
+
+    label = Label(root, text="YOUR INVENTORY")
+    label.pack(pady=(75, 25))
+
+    display_items = Listbox(root)
+    display_items.pack(side="top", pady=(40, 15))
+    update_inventory()
     return_menu()
 
 
