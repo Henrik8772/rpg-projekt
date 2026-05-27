@@ -40,8 +40,9 @@ boss_attack = ""
 
 bosses = [
     {
-        "id": "boss",
-        "boss_id": "goblin_boss",
+        "id": "goblin_boss",
+        "zone": "forest",
+        "required_item": "Kings Idol",
         "name": "Goblin King",
         "hp": 1000,
         "chance_for_pressure": 0,
@@ -473,17 +474,29 @@ def explore():
     button.pack(side="top", pady=50, padx=20)
     button_frame.pack(side="top", fill="x")
 
-    has_item = any(boss_items["item_id"] == bosses["boss_id"]
-                   for item in item_inventory)
-    if has_item:
-        button = Button(button_frame, text="BOSS")
+    active_boss = None
+    for boss in bosses:
+        if boss["zone"] == place_id and boss["required_item"] in item_inventory:
+            active_boss = boss
+            break
+
+    if active_boss:
+        boss_button = Button(root, text=f"CHALLANGE {active_boss["name"].upper()}",
+                             fg="red", activeforeground="red", command=lambda b=active_boss: boss_fight(b))
+        boss_button.pack(pady=20)
 
 
-def boss_fight():
-    global place_id
-    place_id = bosses["id"]
+def boss_fight(boss_data):
     clear_screen()
-    boss_encounter()
+    boss_encounter(boss_data)
+
+
+def boss_encounter(boss):
+    clear_screen()
+    stat_fix()
+
+    boss_total_hp = boss["hp"]
+    boss_name = boss["name"]
 
 
 def keep_playing():
@@ -519,23 +532,6 @@ def open_new_window(name):
     new_window = Toplevel(root)
     new_window.title(name)
     new_window.geometry("500x400")
-
-
-def boss_encounter():
-    clear_screen()
-    stat_fix()
-
-    the_boss = [b for b in bosses if b["id"] ==
-                place_id and boss_items["item_id"] == b["boss_id"]]
-    if not the_boss:
-        return
-    boss = random.choice(the_boss)
-
-    boss_hp = boss["hp"]
-
-    boss_label = Label(
-        root, text=f"The {boss_items["name"]} starts to glow, a boss has spawned!")
-    boss_label.pack(pady=(75, 25))
 
 
 def encounter():
