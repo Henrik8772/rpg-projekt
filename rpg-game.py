@@ -524,6 +524,40 @@ def boss_encounter(boss):
                               state="disabled", fg="grey")
         run_away_btn.pack(side="right", pady=50, padx=20)
 
+        stat_ui = Listbox(root)
+        stat_ui.insert(0, f"HEALTH: {player_hp_total}")
+        stat_ui.insert(1, f"MANA: {mana_player}")
+        stat_ui.pack(side="top", anchor="w", pady=30, padx=20)
+
+        action_frame = Frame(root, bg="black")
+        action_frame.pack(side="top", pady=10)
+
+    def choose_attack(btn, hp_label):
+        btn.config(state="disabled")
+
+        for widget in action_frame.winfo_children():
+            widget.destroy()
+
+        atk_names = [atk["name"] for atk in attacks]
+        selector = ttk.Combobox(
+            action_frame, values=atk_names, state="readonly", font=font_explore)
+        selector.set("select Magic/Skill")
+        selector.pack(pady=5)
+
+        confirm = Button(action_frame, text="CONFIRM", width=10, font=font_explore,
+                         command=lambda: finalize_attack(selector.get(), btn, hp_label))
+        confirm.pack(pady=5)
+
+    def finalize_attack(choice, btn, hp_label):
+        nonlocal boss_total_hp
+        global mana_player, player_hp_total
+
+        if choice == "Select Magic/Skill":
+            btn.config(state="normal")
+            return
+
+        atk_data = next((a for a in attacks if a["name"] == choice), None)
+
 
 def keep_playing():
     clear_screen()
