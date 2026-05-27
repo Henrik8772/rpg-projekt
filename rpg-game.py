@@ -558,6 +558,41 @@ def boss_encounter(boss):
 
         atk_data = next((a for a in attacks if a["name"] == choice), None)
 
+        if atk_data:
+            if "mana" in atk_data:
+                if mana_player < atk_data["mana"]:
+                    messagebox.showwarning(
+                        message="You don't have enough mana to cast this magic!!!")
+                    btn.config(state="normal")
+                    return
+                else:
+                    mana_player -= atk_data["mana"]
+
+            skill_dmg = random.randint(
+                atk_data["dmg_range"][0], atk_data["dmg_range"][1])
+            dmg = player_attack + skill_dmg
+            boss_total_hp -= dmg
+
+            if boss_total_hp < 0:
+                boss_total_hp = 0
+
+        if boss_total_hp > 0:
+            boss_attack_data = random.choice(boss["attacks"])
+
+            if "dmg_range" in boss_attack_data:
+                boss_dmg = random.randint(
+                    boss_attack_data["dmg_range"][0], boss_attack_data["dmg_range"][1])
+
+            elif boss_attack_data.get("dmg_type") == "percentage":
+                boss_dmg = int(player_hp_total * 0.30)
+
+            else:
+                boss_dmg = 15
+
+            player_hp_total -= boss_dmg
+            if player_hp_total < 0:
+                player_hp_total = 0
+
 
 def keep_playing():
     clear_screen()
