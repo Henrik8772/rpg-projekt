@@ -15,3 +15,5 @@ Jag har fixat stats och battle system samt decimal överflödet mitt mål med de
 i want to fix more features such as inventory and items and shops that reset with random items and stuff.
 
 Adding stuff for a pressure system to make the battles more random and harder.
+
+Fixed the pressure system but now i am dying on the inside while trying to make a boss fight based on that u drop a boss spawn item that then goes into your inventory and from there the system checks if u have it if u do then a boss button will appear in the encounter screen and so on.
