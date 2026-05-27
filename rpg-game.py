@@ -498,6 +498,18 @@ def boss_encounter(boss):
     boss_total_hp = boss["hp"]
     boss_name = boss["name"]
 
+    venture = Label(
+        root, text=f"The {boss["required_item"]} starts glowing wildly...")
+    venture.pack(pady=(75, 25))
+
+    def encounter_message():
+        venture["text"] = (
+            f"You have realised the {boss_name} from its slumber, PREPARE FOR BATTLE!!")
+        venture.config(fg="red")
+
+    def fight_start():
+        global stat_ui, action_frame
+
 
 def keep_playing():
     clear_screen()
