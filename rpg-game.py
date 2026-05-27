@@ -510,6 +510,20 @@ def boss_encounter(boss):
     def fight_start():
         global stat_ui, action_frame
 
+        hp_label = Label(root, text=f"BOSS HP: {boss_total_hp}", fg="red")
+        hp_label.pack(pady=5)
+
+        ui_frame = Frame()
+        ui_frame.pack(side="top", fill="x")
+
+        main_attack_btn = Button(ui_frame, text="ATTACK",
+                                 command=lambda: choose_attack(main_attack_btn, hp_label))
+        main_attack_btn.pack(side="left", pady=50, padx=20)
+
+        run_away_btn = Button(ui_frame, text="CAN'T ESCAPE",
+                              state="disabled", fg="grey")
+        run_away_btn.pack(side="right", pady=50, padx=20)
+
 
 def keep_playing():
     clear_screen()
@@ -579,6 +593,7 @@ def encounter():
 
     def fight_start():
         global stat_ui
+        global action_frame
         nonlocal monster_total_hp
 
         if pressure in [1, 2, 3]:
@@ -605,15 +620,13 @@ def encounter():
         run_away_btn.pack(side="right", pady=50, padx=20)
         ui_frame.pack(side="top", fill="x")
 
+        action_frame = Frame(root, bg="black")
+        action_frame.pack(side="top", pady=10)
+
         stat_ui = Listbox(root)
         stat_ui.insert(1, f"HEALTH: {player_hp_total}")
         stat_ui.insert(2, f"MANA: {mana_total}")
-        stat_ui.pack(side="left", pady=30, padx=20)
-
-        global action_frame
-
-        action_frame = Frame(root, bg="black")
-        action_frame.pack(pady=10)
+        stat_ui.pack(side="top", anchor="w", pady=30, padx=20)
 
     def escape():
         if pressure in [1, 2, 3]:
