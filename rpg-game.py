@@ -593,6 +593,16 @@ def boss_encounter(boss):
             if player_hp_total < 0:
                 player_hp_total = 0
 
+        hp_label.config(text=f"BOSS HP: {boss_total_hp}")
+
+        for widget in action_frame.winfo_children():
+            widget.destroy()
+
+        btn.config(state="normal")
+
+    def player_feedback():
+        feedback = Label(action_frame, text=f"")
+
 
 def keep_playing():
     clear_screen()
