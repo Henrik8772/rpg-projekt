@@ -51,7 +51,7 @@ bosses = [
                 "name": "Kings Judgment",
                 "dmg_type": "percentage",
                 "percent_range": (0.30, 0.50),
-                "accuracy": 0.4
+                "accuracy": 0.3
             },
 
             {
@@ -59,7 +59,15 @@ bosses = [
                 "dmg_range": (10, 20),
                 "hits_range": (1, 3),
                 "accuracy": 0.5
+            },
+
+            {
+                "name": "Stomp Fury",
+                "dmg_range": (5, 7),
+                "hits_range": (2, 6),
+                "accuracy": 0.5
             }
+
         ]
     }
 ]
@@ -585,17 +593,31 @@ def boss_encounter(boss):
         if boss_total_hp > 0:
             boss_attack_data = random.choice(boss["attacks"])
 
-            if "dmg_range" in boss_attack_data:
-                boss_dmg = random.randint(
-                    boss_attack_data["dmg_range"][0], boss_attack_data["dmg_range"][1])
-
-            elif boss_attack_data.get("dmg_type") == "percentage":
-                percent_dmg = random.randint(
-                    boss["percent_range"][0], boss["percent_range"][1])
-                boss_dmg = int(player_hp_total * percent_dmg)
+            if "accuracy" in boss_attack_data and random.random() > boss_attack_data["accuracy"]:
+                boss_dmg = 0
+                boss_missed = True
 
             else:
-                boss_dmg = 15
+                boss_missed = False
+                boss_dmg = 0
+
+                if "dmg_range" in boss_attack_data:
+                    if "hits_range" in boss_attack_data:
+                        num_hits = random.randint(
+                            boss_attack_data["hits_range"][0], boss_attack_data["hits_range"][1])
+                    else:
+                        num_hits = 1
+                    for _ in range(num_hits):
+                        boss_dmg = random.randint(
+                            boss_attack_data["dmg_range"][0], boss_attack_data["dmg_range"][1])
+
+                elif boss_attack_data.get("dmg_type") == "percentage":
+                    percent_dmg = random.uniform(
+                        boss_attack_data["percent_range"][0], boss_attack_data["percent_range"][1])
+                    boss_dmg = int(player_hp_total * percent_dmg)
+
+                else:
+                    boss_dmg = 15
 
             player_hp_total -= boss_dmg
             if player_hp_total < 0:
@@ -621,12 +643,16 @@ def boss_encounter(boss):
             root.after(1000, feedback1.destroy)
 
         def boss_feedback():
-            monster_feedback = Label(
-                action_frame, text=f"The monster used {boss_attack_data["name"]} dealing {boss_dmg} to you!!", fg="yellow")
-            monster_feedback.pack()
+            if boss_missed:
+                text_msg = f"The boss used {boss_attack_data["name"]} but MISSED!!!"
+            else:
+                text_msg = f"The {boss} used {boss_attack_data["name"]} dealing {boss_dmg} to you!!"
+            boss_text_feedback = Label(
+                action_frame, text=text_msg, fg="yellow")
+            boss_text_feedback.pack()
             stat_ui.delete(0)
             stat_ui.insert(0, f"HEALTH: {player_hp_total}")
-            root.after(1000, monster_feedback.destroy)
+            root.after(1000, boss_text_feedback.destroy)
 
         if boss_total_hp != 0:
             player_feedback()
@@ -634,7 +660,7 @@ def boss_encounter(boss):
 
         if player_hp_total <= 0:
             messagebox.showinfo(
-                message=f"GAME OVER!! You lost to The {boss["name"]}, you have died...")
+                message=f"GAME OVER!! You lost to The {boss_name}, you have died...")
             quit
 
         if boss_total_hp <= 0:
