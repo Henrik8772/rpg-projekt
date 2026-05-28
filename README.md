@@ -21,4 +21,6 @@ Fixed the pressure system but now i am dying on the inside while trying to make 
 I have started to build the boss battle system so it will be done soon if everything goes well.
 
 I have finished building the boss battle system, i fixed some small issues with the drop system and i have also fixed som ui problems.
-This took some time but is now done.
+This took some time but is now done.'
+
+I have added some small fixes so that the bosses attacks work properly and that rapid smash scales with hits and all attacks scale with accuracy as well

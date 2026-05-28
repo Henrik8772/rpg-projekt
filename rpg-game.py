@@ -542,7 +542,7 @@ def boss_encounter(boss):
         action_frame.pack(side="top", pady=10)
 
         stat_ui = Listbox(root)
-        stat_ui.insert(0, f"HEALTH: {player_hp_total}")
+        stat_ui.insert(0, f"HEALTH: {player_hp_total:.0f}")
         stat_ui.insert(1, f"MANA: {mana_player}")
         stat_ui.pack(side="top", anchor="w", pady=30, padx=20)
 
@@ -651,7 +651,7 @@ def boss_encounter(boss):
                 action_frame, text=text_msg, fg="yellow")
             boss_text_feedback.pack()
             stat_ui.delete(0)
-            stat_ui.insert(0, f"HEALTH: {player_hp_total}")
+            stat_ui.insert(0, f"HEALTH: {player_hp_total:.0f}")
             root.after(1000, boss_text_feedback.destroy)
 
         if boss_total_hp != 0:
