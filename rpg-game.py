@@ -50,6 +50,7 @@ bosses = [
             {
                 "name": "Kings Judgment",
                 "dmg_type": "percentage",
+                "percent_range": (0.30, 0.50),
                 "accuracy": 0.4
             },
 
@@ -255,8 +256,11 @@ monsters = [
                 "quality_range": (60, 100),
                 "quantity_range": (1, 1),
                 "base_worth_range": (175, 175)
-            },
+            }
 
+        ],
+
+        "granted_drops": [
             {
                 "name": "Kings Idol",
                 "drop_rate": 1,
@@ -265,6 +269,7 @@ monsters = [
                 "base_worth_range": (1, 1)
             }
         ]
+
     },
 
     {
@@ -481,9 +486,11 @@ def explore():
             break
 
     if active_boss:
-        boss_button = Button(root, text=f"CHALLANGE {active_boss["name"].upper()}",
+        boss_button = Button(root, text=f"CHALLANGE {active_boss["name"].upper()}", width=30,
                              fg="red", activeforeground="red", command=lambda b=active_boss: boss_fight(b))
         boss_button.pack(pady=20)
+
+    return_menu()
 
 
 def boss_fight(boss_data):
@@ -514,8 +521,6 @@ def boss_encounter(boss):
         hp_label.pack(pady=5)
 
         ui_frame = Frame()
-        ui_frame.pack(side="top", fill="x")
-
         main_attack_btn = Button(ui_frame, text="ATTACK",
                                  command=lambda: choose_attack(main_attack_btn, hp_label))
         main_attack_btn.pack(side="left", pady=50, padx=20)
@@ -523,14 +528,15 @@ def boss_encounter(boss):
         run_away_btn = Button(ui_frame, text="CAN'T ESCAPE",
                               state="disabled", fg="grey")
         run_away_btn.pack(side="right", pady=50, padx=20)
+        ui_frame.pack(side="top", fill="x")
+
+        action_frame = Frame(root, bg="black")
+        action_frame.pack(side="top", pady=10)
 
         stat_ui = Listbox(root)
         stat_ui.insert(0, f"HEALTH: {player_hp_total}")
         stat_ui.insert(1, f"MANA: {mana_player}")
         stat_ui.pack(side="top", anchor="w", pady=30, padx=20)
-
-        action_frame = Frame(root, bg="black")
-        action_frame.pack(side="top", pady=10)
 
     def choose_attack(btn, hp_label):
         btn.config(state="disabled")
@@ -584,7 +590,9 @@ def boss_encounter(boss):
                     boss_attack_data["dmg_range"][0], boss_attack_data["dmg_range"][1])
 
             elif boss_attack_data.get("dmg_type") == "percentage":
-                boss_dmg = int(player_hp_total * 0.30)
+                percent_dmg = random.randint(
+                    boss["percent_range"][0], boss["percent_range"][1])
+                boss_dmg = int(player_hp_total * percent_dmg)
 
             else:
                 boss_dmg = 15
@@ -600,8 +608,55 @@ def boss_encounter(boss):
 
         btn.config(state="normal")
 
-    def player_feedback():
-        feedback = Label(action_frame, text=f"")
+        def player_feedback():
+            feedback = Label(
+                action_frame, text=f"Dealt {dmg} damage!", fg="yellow")
+            feedback.pack()
+            stat_ui.delete(1)
+            stat_ui.insert(1, f"MANA: {mana_player}")
+            feedback1 = Label(
+                action_frame, text=f"You have {mana_player} mana left!", fg="light blue")
+            feedback1.pack()
+            root.after(1000, feedback.destroy)
+            root.after(1000, feedback1.destroy)
+
+        def boss_feedback():
+            monster_feedback = Label(
+                action_frame, text=f"The monster used {boss_attack_data["name"]} dealing {boss_dmg} to you!!", fg="yellow")
+            monster_feedback.pack()
+            stat_ui.delete(0)
+            stat_ui.insert(0, f"HEALTH: {player_hp_total}")
+            root.after(1000, monster_feedback.destroy)
+
+        if boss_total_hp != 0:
+            player_feedback()
+            root.after(2000, boss_feedback)
+
+        if player_hp_total <= 0:
+            messagebox.showinfo(
+                message=f"GAME OVER!! You lost to The {boss["name"]}, you have died...")
+            quit
+
+        if boss_total_hp <= 0:
+            global gold
+
+            reward = randint(300, 500)
+            if random.random() < luck:
+                reward *= luck_multi
+            gold += reward
+
+            messagebox.showinfo(
+                icon="question", message=f"Yippie you won and earned yourself {reward:.0f} gold coins!!!")
+
+            if boss["required_item"] in item_inventory:
+                item_inventory.remove(boss["required_item"])
+                messagebox.showinfo(
+                    message=f"The {boss["required_item"]} stops glowing and starts to disintegrate, disappearing before your eyes...")
+
+            game_menu()
+
+    root.after(1000, encounter_message)
+    root.after(1500, fight_start)
 
 
 def keep_playing():
@@ -633,12 +688,6 @@ def ran_away():
     button_frame.pack(side="top")
 
 
-def open_new_window(name):
-    new_window = Toplevel(root)
-    new_window.title(name)
-    new_window.geometry("500x400")
-
-
 def encounter():
     clear_screen()
     stat_fix()
@@ -655,7 +704,7 @@ def encounter():
 
     if roll_pressure >= 85 and roll_pressure < 95:
         pressure = 4
-    elif roll_pressure >= 95 and roll_pressure <= 100:
+    elif roll_pressure >= 1 and roll_pressure <= 100:
         pressure = 5
     elif roll_pressure >= 60 and roll_pressure < 85:
         pressure = random.randint(1, 3)
@@ -832,6 +881,7 @@ def encounter():
 
             basic_loot = None
             loot = None
+            granted_loot = None
 
             if pressure == 0:
                 if monster.get("basic_drops"):
@@ -869,30 +919,51 @@ def encounter():
                     if random.random() > loot["drop_rate"]:
                         loot = None
 
+                if monster.get("granted_drops"):
+                    granted_loot = random.choice(monster["granted_drops"])
+
             messagebox.showinfo(
                 icon="question", message=f"Yippie you won and earned yourself {reward:.0f} gold coins!!!")
 
-            if basic_loot is None and loot is None:
+            if basic_loot:
+                basic_quantity = random.randint(
+                    basic_loot["quantity_range"][0], basic_loot["quantity_range"][1])
+                for _ in range(basic_quantity):
+                    item_inventory.append(basic_loot["name"])
+
+            if granted_loot:
+                granted_quantity = random.randint(
+                    granted_loot["quantity_range"][0], granted_loot["quantity_range"][1])
+                for _ in range(granted_quantity):
+                    item_inventory.append(granted_loot["name"])
+
+            if loot:
+                loot_quantity = random.randint(
+                    loot["quantity_range"][0], loot["quantity_range"][1])
+                for _ in range(loot_quantity):
+                    item_inventory.append(loot["name"])
+
+            if basic_loot is None and loot is None and granted_loot is None:
                 messagebox.showinfo(
                     icon="question", message="You got nothing :(")
             else:
                 msg_text = "You got "
+
                 if basic_loot:
-                    basic_quantity = random.randint(
-                        basic_loot["quantity_range"][0], basic_loot["quantity_range"][1])
-                    for _ in range(basic_quantity):
-                        item_inventory.append(basic_loot["name"])
-                    msg_text += f"{basic_quantity}x {basic_loot['name']}"
+                    msg_text += f"{basic_quantity}x {basic_loot["name"]}"
+
+                if granted_loot:
+                    if basic_loot:
+                        msg_text += f" and {granted_quantity}x {granted_loot["name"]}"
+                    else:
+                        msg_text += f"{granted_quantity}x {granted_loot["name"]}"
 
                 if loot:
-                    loot_quantity = random.randint(
-                        loot["quantity_range"][0], loot["quantity_range"][1])
-                    for _ in range(loot_quantity):
-                        item_inventory.append(loot["name"])
-                    if basic_loot:
-                        msg_text += f" and {loot_quantity}x {loot['name']}"
+                    if basic_loot or granted_loot:
+                        msg_text += f" and {loot_quantity}x {loot["name"]}"
                     else:
-                        msg_text += f"{loot_quantity}x {loot['name']}"
+                        msg_text += f"{loot_quantity}x {loot["name"]}"
+
                 messagebox.showinfo(icon="question", message=msg_text)
 
             item_inventory.sort()
