@@ -231,6 +231,13 @@ monsters = [
                     {
                         "dmg": 40
                     }
+                ],
+                "weapon_skills": [
+                    {
+                        "name": "Slashing Terror",
+                        "dmg_range": (10, 30),
+                        "mana": 30
+                    }
                 ]
             },
 
