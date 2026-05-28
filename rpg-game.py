@@ -704,7 +704,7 @@ def encounter():
 
     if roll_pressure >= 85 and roll_pressure < 95:
         pressure = 4
-    elif roll_pressure >= 1 and roll_pressure <= 100:
+    elif roll_pressure >= 95 and roll_pressure <= 100:
         pressure = 5
     elif roll_pressure >= 60 and roll_pressure < 85:
         pressure = random.randint(1, 3)
